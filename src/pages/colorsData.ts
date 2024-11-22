@@ -1,6 +1,10 @@
-// colorsData.js
+interface ColorData {
+  name: string;
+  hex: string;
+  rgb: string;
+}
 
-export const colorsData = [
+export const colorsData: ColorData[] = [
   { name: "Green", hex: "#006400", rgb: "(0, 100, 0)" },
   { name: "Green", hex: "#008000", rgb: "(0, 128, 0)" },
   { name: "Green", hex: "#00FF00", rgb: "(0, 255, 0)" },
