@@ -20,7 +20,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-h2, p{
+h2, p, strong{
   text-shadow: 0 1px 1px rgba(58, 155, 109, 0.37);
 }
 

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { colorsData } from "./colorsData";
+import { ColorData, colorsData } from "./colorsData";
 import styles from "../styles/_home.module.css";
 
 // Componente de detalles del color
-const ColorDetails = ({ color }) => (
+const ColorDetails = ({ color } :  { color: ColorData }) => (
   <div 
     className={styles.colorDetails} 
     style={{ backgroundColor: color.hex }}
@@ -16,7 +16,7 @@ const ColorDetails = ({ color }) => (
 );
 
 // Componente para la caja de color
-const ColorBox = ({ color, onClick, setSearch }) => (
+const ColorBox = ({ color, onClick, setSearch } :  { color: ColorData }) => (
   <div
     className={styles.colorBox}
     style={{ backgroundColor: color.hex }}
@@ -31,7 +31,7 @@ const ColorBox = ({ color, onClick, setSearch }) => (
 
 export default function Home() {
   const [search, setSearch] = useState('');
-  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedColor, setSelectedColor] = useState<ColorData | null>(null);
 
   const filterColors = search
     ? colorsData.filter(color =>
@@ -73,7 +73,7 @@ export default function Home() {
               <h4 className={styles.noResults}>No se encontraron resultados</h4>
             ) : (
               <div className={styles.colorGrid}>
-                {filterColors.map((color,index) => (
+                {filterColors.map((color,index)  => (
                   <ColorBox
                     key={index}
                     color={color}

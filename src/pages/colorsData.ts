@@ -1,4 +1,4 @@
-interface ColorData {
+export interface ColorData {
   name: string;
   hex: string;
   rgb: string;
