@@ -1,80 +1,105 @@
 import { useState } from "react";
-import {colorsData} from "./colorsData";
-
+import { colorsData } from "./colorsData";
 import styles from "../styles/_home.module.css";
 
-//fragments
-//filterColor
-const filterColor = (search, colors) =>{
-  return search
-  ? colors.filter((color) => 
-    color.name.toLowerCase().includes(search.toLowerCase())
-  ) : colors;
-}
-
-//colorDetails
-const ColorDetails = ({color}) =>(
-  <div
-   className={styles.colorDetails}>
-      <h2>Información del color</h2>
-      <p><strong>Nombre:</strong> {color.name} </p>
-      <p><strong>Hex:</strong> {color.hex} </p>
-      <p><strong>RGB:</strong> {color.rgb} </p>
-    </div>
+// Componente de detalles del color
+const ColorDetails = ({ color }) => (
+  <div 
+    className={styles.colorDetails} 
+    style={{ backgroundColor: color.hex }} 
+  >
+    <h2>Información del color</h2>
+    <p><strong>Nombre:</strong> {color.name}</p>
+    <p><strong>Hex:</strong> {color.hex}</p>
+    <p><strong>RGB:</strong> {color.rgb}</p>
+  </div>
 );
 
-//colorBoxDatail
-const ColorBox = ({color, onClick}) => (
+// Componente para la caja de color
+const ColorBox = ({ color, onClick, setSearch }) => (
   <div 
-  className={styles.colorBox}
-  style={{ backgroundColor: color.hex }}
-  onClick={() => onClick(color)}>
+    className={styles.colorBox}
+    style={{ 
+      backgroundColor: color.hex 
+    }}
+    onClick={() => {
+      onClick(color);
+      setSearch(color.name);
+    }}
+
+  >
     <p>{color.name}</p>
   </div>
 );
 
-//mainnpx eslint --init
-export default function Home(){
+export default function Home() {
   const [search, setSearch] = useState('');
   const [selectedColor, setSelectedColor] = useState(null);
 
-  const filterColors = filterColor(search, colorsData); 
-  const clearSearch = () => setSearch('');
+  const filterColors = search 
+    ? colorsData.filter(color => color.name.toLowerCase().includes(search.toLowerCase()))
+    : colorsData;
+
+  // Función para limpiar el campo de búsqueda
+  const clearSearch = () => {
+    setSearch(''),
+    setSelectedColor(null);
+  }
+    ;
 
   return (
-    <div  className={styles.container}>
-        <h1 
-          className={styles.title}>Color Finder | PUNTA DIGITAL
-        </h1>
-        <input 
-          type="text"
-          placeholder="¿Cuál es tu color favorito de la lista?"
-          value={search}
-          onChange={(e)=> setSearch(e.target.value)}
-          className={styles.searchInput}
+    <div className={styles.page}>
+      <div className={styles.card}>
+        <div className={styles.leftSide}>
+         <div className={styles.topLestSide}>
+         <h1 className={styles.title}>Color Finder | PUNTA DIGITAL</h1>
+          <div>
+            <input 
+              type="text"
+              placeholder="¿Cuál es tu color favorito de la lista?"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className={styles.searchInput}
+            />
+            <button 
+              className={styles.clearButton}
+              onClick={clearSearch}  
+            >
+              Limpiar
+            </button>
+          </div>
+         </div>
+
+          <div className={styles.bottomLestSide}>
+
+      {filterColors.length === 0 ? (
+        <h4 className={styles.noResults}>
+          No se encontraron resultados
+        </h4>
+
+      ):(
+        <div className={styles.colorGrid}>
+        {filterColors.map((color) => (
+          <ColorBox 
+            key={color.hex} 
+            color={color} 
+            onClick={(color) =>{
+              setSelectedColor(color);
+              setSearch(color.name);
+            }}  
+            setSearch={setSearch} 
           />
-        <div   
-          onClick={clearSearch} 
-          className={styles.clearSearch}>
-          <p>Limpiar</p>
-        </div>
-  
-      <div className={styles.colorGrid}>
-        { filterColors.map((color)=>(
-            <ColorBox
-              key = {color.hex}
-              color = {color}
-              onClick = {setSelectedColor}
-              />
-          ))
-        }
+        ))}
       </div>
+      )}
+          </div>
+         
+        </div>
 
-      { selectedColor && 
-      <ColorDetails 
-        color={selectedColor}/>
-      }
-
+        <div className={styles.rightSide}>
+          {selectedColor && <ColorDetails color={selectedColor} />}
+        </div>
+      </div>
     </div>
-  )
+  );
 }
